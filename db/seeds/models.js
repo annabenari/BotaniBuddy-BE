@@ -41,17 +41,15 @@ const usersSchema = new mongoose.Schema({
 
   password: String,
 
-  plants: [Schema.Types.ObjectId],
+  plants: [mongoose.Schema.Types.ObjectId],
 });
 
 const plantsSchema = new mongoose.Schema({
-  tasks: Schema.Types.Mixed,
+  tasks: mongoose.Schema.Types.Mixed,
 
-  users: [Schema.Types.ObjectId],
+  users: [mongoose.Schema.Types.ObjectId],
 
-  plantType: Schema.Types.ObjectId,
+  plantType: mongoose.Schema.Types.ObjectId,
 });
 
-
-
-module.exports = { plantInfoSchema, usersSchema, plantsSchema};
+module.exports = { plantInfoSchema, usersSchema, plantsSchema };
