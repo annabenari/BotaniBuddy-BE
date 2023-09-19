@@ -1,4 +1,4 @@
-const PlantInfo = [
+module.exports = [
   {
     commonName: "Aloe Vera",
     scientificName: "Aloe barbadensis miller",

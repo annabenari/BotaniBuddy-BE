@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
 
-const Plants = [
+module.exports = [
   {
     tasks: {
       task1: "Water the plant",
@@ -38,4 +38,4 @@ const Plants = [
   },
 ];
 
-module.exports = Plants;
+

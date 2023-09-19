@@ -1,4 +1,4 @@
-const Plants = [
+module.exports = [
   {
     tasks: {
       taskName: "Task 1",

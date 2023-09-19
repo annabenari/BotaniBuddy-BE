@@ -1,4 +1,4 @@
-const UserInfo = [
+module.exports = [
   {
     username: "jane_smith",
     password: "secure_password_123",
@@ -24,4 +24,3 @@ const UserInfo = [
   },
 ];
 
-module.exports = UserInfo

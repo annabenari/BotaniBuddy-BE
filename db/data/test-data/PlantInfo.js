@@ -1,6 +1,5 @@
-const mongoose = require("mongoose")
 
-const PlantInfo = [
+module.exports = [
   {
     commonName: "Lavender",
     scientificName: "Lavandula",
@@ -95,4 +94,3 @@ const PlantInfo = [
   },
 ];
 
-module.exports = PlantInfo
