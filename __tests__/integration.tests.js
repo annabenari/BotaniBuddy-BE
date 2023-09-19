@@ -15,8 +15,25 @@ afterAll( async ()=> {
 })
 
 describe('POST /api/register allows a user to register on the app', ()=> {
-    test('Status 200:  ', ()=> {
-        console.log("testing")
+    test('Status 201: responds with created user ', ()=> {
+
+        return request(app)
+        .post("/api/register")
+        .send({
+            "username": "Chris",
+            "password": "bananas"
+        })
+        .expect(201)
+        .then(({body}) => {
+
+            console.log(body)
+
+           expect(body.user).toHaveProperty("username", "Chris")
+           expect(body.user).toHaveProperty("password", expect.any(String))
+           expect(body.user.password).not.toEqual("bananas")
+           
+        })
     })
 })
+
 
