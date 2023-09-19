@@ -1,5 +1,8 @@
+const mongoose = require("mongoose")
+
 const PlantInfo = [
   {
+    _id: new mongoose.Types.ObjectId(1),
     commonName: "Lavender",
     scientificName: "Lavandula",
     maxHeight: 60,
