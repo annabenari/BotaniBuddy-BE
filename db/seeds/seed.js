@@ -8,7 +8,7 @@ const UserInfoData = require("../data/test-data/UserInfo");
 async function seed() {
   console.log("before connection in seed");
   await connection();
-  console.log("after connection");
+  console.log("after connection in seed");
   const PlantInfo = await mongoose.model("PlantInfo", plantInfoSchema);
   const Plants = await mongoose.model("Plants", plantsSchema);
   const Users = await mongoose.model("Users", usersSchema);
@@ -16,54 +16,60 @@ async function seed() {
   await PlantInfo.deleteMany({});
   await Plants.deleteMany({});
   await Users.deleteMany({});
+  console.log("after deleting");
 
-  PlantInfoData.forEach(async (plantInfo, index) => {
-    const plantInfoId = new mongoose.Types.ObjectId()
+  for (let index = 0; index < PlantInfoData.length; index++) {
+    console.log(index);
+    const plantInfoId = new mongoose.Types.ObjectId();
     await PlantInfo.create({
       _id: plantInfoId,
-      ...plantInfo,
-    })
-    const plantId = new mongoose.Types.ObjectId()
-    const userId = new mongoose.Types.ObjectId()
+      ...PlantInfoData[index],
+    });
+    const plantId = new mongoose.Types.ObjectId();
+    const userId = new mongoose.Types.ObjectId();
     await Plants.create({
       _id: plantId,
       ...PlantsData[index],
       users: [userId],
-      plantType: plantInfoId
-    })
+      plantType: plantInfoId,
+    });
     await Users.create({
       _id: userId,
       ...UserInfoData[index],
-      plants: [plantId]
-    })
-  })
+      plants: [plantId],
+    });
+  }
+  const plantIds = await Plants.find({}, "_id", { limit: 3 });
+  console.log(plantIds);
+  const plantIdsArray = plantIds.map((id) => {
+    return id._id;
+  });
+  console.log(plantIdsArray);
+  const filter = { username: UserInfoData[0].username };
+  const update = { plants: plantIdsArray };
 
+  await Users.findOneAndUpdate(filter, update);
+
+  const allUsers = await Users.find();
+  console.log(allUsers);
+
+  const userIds = await Users.find({}, "_id", { limit: 3 });
+  const userIdsArray = userIds.map((id) => id._id);
+  console.log(userIdsArray)
+
+  const plantId = await Plants.find({}, "_id", { limit: 1 })
+
+  console.log(plantId);
+  await Plants.findOneAndUpdate({_id: plantId[0]._id}, {users: userIdsArray});
+
+  const allPlants = await Plants.find()
+
+  console.log(allPlants)
+
+  console.log("before disconnect");
   await mongoose.connection.close();
-  console.log("after disconnect")
+  console.log("after disconnect");
 }
-
-/*
-for loop length 30
-create plantinfo id
-insert plantinfo( {
-  _id: plantinfo id
-  ...
-})
-create plant id
-create user id
-insert plant ({
-  _id: plant id
-  ...
-  users: [user id]
-  plantType: plantInfo id
-})
-
-insert user ({
-  _id: user id
-  ...
-  plants: [plant id]
-})
-*/
 
 seed();
 
