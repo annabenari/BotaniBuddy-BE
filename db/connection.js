@@ -10,6 +10,8 @@ if (!URL) {
   throw new Error("no URL env variable set")
 }
 
-mongoose.connect(URL)
+async function connection () {
+  await mongoose.connect(URL)
+}
 
-module.exports = mongoose
+module.exports = connection
