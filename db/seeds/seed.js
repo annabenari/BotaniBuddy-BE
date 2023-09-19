@@ -19,8 +19,9 @@ async function seed() {
   await Plants.insertMany(PlantsData);
   await Users.deleteMany({});
   await Users.insertMany(UserInfoData);
+  await mongoose.connection.close()
 }
 
-seed().then(() => mongoose.connection.close())
+seed()
 
-// module.exports = seed;
+module.exports = seed;
