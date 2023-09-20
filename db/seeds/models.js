@@ -38,7 +38,7 @@ const plantInfoSchema = new mongoose.Schema({
 
 const usersSchema = new mongoose.Schema({
   username: {type: String, required: true},
-  password: String,
+  password: {type: String, required: true},
   plants: [mongoose.Schema.Types.ObjectId],
 });
 

@@ -2,7 +2,7 @@ const database = require('./db/connection')
 const express = require("express");
 const cors = require("cors");
 const {postUser} = require('./controllers/login.controller')
-const {mongoErrors} = require('./errors/errors')
+const {mongoErrors, customErrors} = require('./errors/errors')
 
 const app = express();
 database()
@@ -18,6 +18,7 @@ app.use((request, response)=> {
 })
 
 app.use(mongoErrors)
+app.use(customErrors)
 
 
 module.exports = app;

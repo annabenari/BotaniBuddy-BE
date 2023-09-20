@@ -5,6 +5,15 @@ const { usersSchema } = require("../db/seeds/models");
 
 exports.createUser = (username, password) => {
 
+  if(password === undefined){
+
+    return Promise.reject({
+      status: 400,
+      msg: "Bad request", 
+      details: "Password not provided"
+  })
+  }
+
   return bcrypt
     .hash(password, 10)
     .then((hashedPassword) => {

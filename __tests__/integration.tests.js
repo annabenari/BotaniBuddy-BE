@@ -42,7 +42,19 @@ describe('POST /api/register allows a user to register on the app', ()=> {
         .expect(400)
         .then(({body}) => {
             expect(body.msg).toBe("Bad request")
-            expect(body.detail).toBe('users validation failed')
+            expect(body.detail).toBe("Path `username` is required.")
+        })
+    }),
+    test.only('Status 400: user does not give all required fields - no password is provided', ()=> {
+        return request(app)
+        .post("/api/register")
+        .send({
+            "username": "Ruby"
+        })
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe("Bad request")
+            expect(body.detail).toBe("Password not provided")
         })
     })
 })
