@@ -15,8 +15,62 @@ afterAll( async ()=> {
 })
 
 describe('POST /api/register allows a user to register on the app', ()=> {
-    test('Status 200:  ', ()=> {
-        console.log("testing")
+    test('Status 201: responds with created user ', ()=> {
+
+        return request(app)
+        .post("/api/register")
+        .send({
+            "username": "Chris",
+            "password": "bananas"
+        })
+        .expect(201)
+        .then(({body}) => {
+
+           expect(body.user).toHaveProperty("user_id", expect.any(String) )
+           expect(body.user).toHaveProperty("username", "Chris")
+           expect(body.user).toHaveProperty("password", expect.any(String))
+           expect(body.user.password).not.toEqual("bananas")
+           
+        })
+    }), 
+    test('Status 400: user does not give all required fields - no username is provided ', ()=> {
+        return request(app)
+        .post("/api/register")
+        .send({
+            "password": "apples"
+        })
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe("Bad request")
+            expect(body.detail).toBe("Path `username` is required.")
+        })
+    }),
+    test('Status 400: user does not give all required fields - no password is provided', ()=> {
+        return request(app)
+        .post("/api/register")
+        .send({
+            "username": "Ruby"
+        })
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe("Bad request")
+            expect(body.detail).toBe("Password not provided")
+        })
+    })
+    test("Status 400: user already exists", ()=>{
+        return request(app)
+        .post("/api/register")
+        .send({
+            "username": "david_wilson",
+            "password": "mysecret",
+        })
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad request")
+            expect(body.detail).toBe("User already exists")
+        })
     })
 })
+
+
 

@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 
 const plantInfoSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
-
   commonName: String,
 
   scientificName: String,
@@ -39,20 +37,14 @@ const plantInfoSchema = new mongoose.Schema({
 });
 
 const usersSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
-  username: String,
-
-  password: String,
-
+  username: {type: String, required: true, unique: true},
+  password: {type: String, required: true},
   plants: [mongoose.Schema.Types.ObjectId],
 });
 
 const plantsSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
   tasks: mongoose.Schema.Types.Mixed,
-
   users: [mongoose.Schema.Types.ObjectId],
-
   plantType: mongoose.Schema.Types.ObjectId,
 });
 
