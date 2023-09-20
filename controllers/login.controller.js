@@ -1,5 +1,5 @@
 const { use } = require('../app')
-const {createUser} = require('../models/login.model')
+const {createUser, createLogin} = require('../models/login.model')
 
 exports.postUser = (request, response, next) => {
     const {username, password} = request.body
@@ -12,4 +12,12 @@ exports.postUser = (request, response, next) => {
 
 }
 
+exports.postLogin = (request, response, next) =>{
+    const {username, password} = request.body
 
+    createLogin(username, password)
+    .then ((result)=>{
+        response.status(200).send({user: result})
+    })
+    .catch(next)
+}

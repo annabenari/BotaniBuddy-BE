@@ -72,5 +72,21 @@ describe('POST /api/register allows a user to register on the app', ()=> {
     })
 })
 
+describe("POST /api/login allows a user to login on the app", ()=>{
+    test("Status 200: responds with sucessful login message", ()=>{
+
+        return request(app)
+        .post("/api/login")
+        .send({
+            "username": "david_wilson",
+            "password": "mysecret",
+        })
+        .expect(200)
+        .then(({body})=>{
+            expect(body.msg).toBe("Login Sucessful")
+            expect(body.username).toBe("david_wilson")
+        })
+    })
+})
 
 

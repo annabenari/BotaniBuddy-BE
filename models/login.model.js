@@ -38,3 +38,24 @@ exports.createUser = (username, password) => {
     })
     .catch((err) => Promise.reject(err));
 };
+
+exports.createLogin = (username, password) =>{
+  const Users = mongoose.model("users", usersSchema)
+
+  Users.findOne({username}).then((user)=>{
+    bycrpt
+    .compare(password, user.password).then((passwordCheck)=>{
+      if(!passwordCheck){
+        return Promise.reject({
+          status: 400,
+          msg: "Bad request", 
+          details: "Password does not match"
+      }) 
+      }
+
+
+    })
+  })
+console.log("inside model");
+
+}
