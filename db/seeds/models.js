@@ -37,18 +37,14 @@ const plantInfoSchema = new mongoose.Schema({
 });
 
 const usersSchema = new mongoose.Schema({
-  username: String,
-
+  username: {type: String, required: true},
   password: String,
-
   plants: [mongoose.Schema.Types.ObjectId],
 });
 
 const plantsSchema = new mongoose.Schema({
   tasks: mongoose.Schema.Types.Mixed,
-
   users: [mongoose.Schema.Types.ObjectId],
-
   plantType: mongoose.Schema.Types.ObjectId,
 });
 

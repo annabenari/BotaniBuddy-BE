@@ -26,14 +26,26 @@ describe('POST /api/register allows a user to register on the app', ()=> {
         .expect(201)
         .then(({body}) => {
 
-            console.log(body)
-
+           expect(body.user).toHaveProperty("user_id", expect.any(String) )
            expect(body.user).toHaveProperty("username", "Chris")
            expect(body.user).toHaveProperty("password", expect.any(String))
            expect(body.user.password).not.toEqual("bananas")
            
         })
+    }), 
+    test('Status 400: user does not give all required fields - no username is provided ', ()=> {
+        return request(app)
+        .post("/api/register")
+        .send({
+            "password": "apples"
+        })
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe("Bad request")
+            expect(body.detail).toBe('users validation failed')
+        })
     })
 })
+
 
 
