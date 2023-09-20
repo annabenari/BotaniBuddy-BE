@@ -87,12 +87,74 @@ describe("POST /api/login allows a user to login on the app", () => {
       })
       .then(({ body }) => {
 
-        console.log(body)
-
+       
 
         expect(body.user.msg).toBe("Login succesful");
         expect(body.user.username).toBe("Chris");
         expect(body.user).toHaveProperty("user_id", expect.any((String)));
       });
   });
+
+  test("Status 400: responds with error when given incorrect password", ()=>{
+    return request(app)
+    .post("/api/register")
+    .send({
+      username: "Chris",
+      password: "bananas",
+    })
+    .then(() => {
+      return request(app)
+        .post("/api/login")
+        .send({
+          username: "Chris",
+          password: "HELLO",
+        })
+        .expect(400);
+    })
+    .then(({body})=>{
+        
+        expect(body.msg).toBe("Bad request")
+        expect(body.detail).toBe("Password does not match")
+    })
+  })
+  test("Status 404: no user found", ()=>{
+    return request(app)
+        .post("/api/login")
+        .send({
+          username: "UNKNOWNUSER",
+          password: "HELLO",
+        })
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe("Not Found")
+            expect(body.detail).toBe("No user found with this username")
+        })
+  })  
+
+  test("Status 400: bad request - invalid input - no username", ()=>{
+    return request(app)
+        .post("/api/login")
+        .send({
+          password: "HELLO",
+        })
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+            expect(body.detail).toBe("Invalid Input")
+        })
+  })  
+  test("Status 400: bad request - invalid input - no password", ()=>{
+    return request(app)
+        .post("/api/login")
+        .send({
+        username: "Chris",
+        })
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+            expect(body.detail).toBe("Invalid Input")
+        })
+  })  
+
+  
 });
