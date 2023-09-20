@@ -1,98 +1,98 @@
-const app = require('../app')
-const database = require('../db/connection')
-const seed = require('../db/seeds/seed')
-const request = require('supertest')
+const app = require("../app");
+const database = require("../db/connection");
+const seed = require("../db/seeds/seed");
+const request = require("supertest");
 const mongoose = require("mongoose");
-const testData = require('../db/data/test-data/index')
+const testData = require("../db/data/test-data/index");
 
+beforeEach(async () => {
+  await seed(testData);
+});
 
-beforeEach( async () => {
-   await seed(testData)
-})
+afterAll(async () => {
+  await mongoose.connection.close();
+});
 
-afterAll( async ()=> {
-   await mongoose.connection.close();
-})
-
-describe('POST /api/register allows a user to register on the app', ()=> {
-    test('Status 201: responds with created user ', ()=> {
-
-        return request(app)
+describe("POST /api/register allows a user to register on the app", () => {
+  test("Status 201: responds with created user ", () => {
+    return request(app)
+      .post("/api/register")
+      .send({
+        username: "Chris",
+        password: "bananas",
+      })
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.user).toHaveProperty("user_id", expect.any(String));
+        expect(body.user).toHaveProperty("username", "Chris");
+        expect(body.user).toHaveProperty("password", expect.any(String));
+        expect(body.user.password).not.toEqual("bananas");
+      });
+  }),
+    test("Status 400: user does not give all required fields - no username is provided ", () => {
+      return request(app)
         .post("/api/register")
         .send({
-            "username": "Chris",
-            "password": "bananas"
-        })
-        .expect(201)
-        .then(({body}) => {
-
-           expect(body.user).toHaveProperty("user_id", expect.any(String) )
-           expect(body.user).toHaveProperty("username", "Chris")
-           expect(body.user).toHaveProperty("password", expect.any(String))
-           expect(body.user.password).not.toEqual("bananas")
-           
-        })
-    }), 
-    test('Status 400: user does not give all required fields - no username is provided ', ()=> {
-        return request(app)
-        .post("/api/register")
-        .send({
-            "password": "apples"
+          password: "apples",
         })
         .expect(400)
-        .then(({body}) => {
-            expect(body.msg).toBe("Bad request")
-            expect(body.detail).toBe("Path `username` is required.")
-        })
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad request");
+          expect(body.detail).toBe("Path `username` is required.");
+        });
     }),
-    test('Status 400: user does not give all required fields - no password is provided', ()=> {
-        return request(app)
+    test("Status 400: user does not give all required fields - no password is provided", () => {
+      return request(app)
         .post("/api/register")
         .send({
-            "username": "Ruby"
+          username: "Ruby",
         })
         .expect(400)
-        .then(({body}) => {
-            expect(body.msg).toBe("Bad request")
-            expect(body.detail).toBe("Password not provided")
-        })
-    })
-    test("Status 400: user already exists", ()=>{
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad request");
+          expect(body.detail).toBe("Password not provided");
+        });
+    });
+  test("Status 400: user already exists", () => {
+    return request(app)
+      .post("/api/register")
+      .send({
+        username: "david_wilson",
+        password: "mysecret",
+      })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+        expect(body.detail).toBe("User already exists");
+      });
+  });
+});
+
+describe("POST /api/login allows a user to login on the app", () => {
+  test("Status 200: responds with sucessful login message", () => {
+    return request(app)
+      .post("/api/register")
+      .send({
+        username: "Chris",
+        password: "bananas",
+      })
+      .then(() => {
         return request(app)
-        .post("/api/register")
-        .send({
-            "username": "david_wilson",
-            "password": "mysecret",
-        })
-        .expect(400)
-        .then(({body})=>{
-            expect(body.msg).toBe("Bad request")
-            expect(body.detail).toBe("User already exists")
-        })
-    })
-})
+          .post("/api/login")
+          .send({
+            username: "Chris",
+            password: "bananas",
+          })
+          .expect(200);
+      })
+      .then(({ body }) => {
 
-describe("POST /api/login allows a user to login on the app", ()=>{
-    test.only("Status 200: responds with sucessful login message", ()=>{
-
-        request(app)
-        .post("/api/register")
-        .send({
-            "username": "Chris",
-            "password": "bananas"
-        })
-        return request(app)
-        .post("/api/login")
-        .send({
-            "username": "Chris",
-            "password": "bananas"
-        })
-        .expect(200)
-        .then(({body})=>{
-            expect(body.msg).toBe("Login succesful")
-            expect(body.username).toBe("Chris")
-        })
-    })
-})
+        console.log(body)
 
 
+        expect(body.user.msg).toBe("Login succesful");
+        expect(body.user.username).toBe("Chris");
+        expect(body.user).toHaveProperty("user_id", expect.any((String)));
+      });
+  });
+});

@@ -16,7 +16,7 @@ exports.postLogin = (request, response, next) =>{
     const {username, password} = request.body
 
     createLogin(username, password)
-    .then ((result)=>{
+    .then((result)=>{
         response.status(200).send({user: result})
     })
     .catch(next)

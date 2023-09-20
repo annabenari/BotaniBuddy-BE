@@ -39,33 +39,36 @@ exports.createUser = (username, password) => {
     .catch((err) => Promise.reject(err));
 };
 
+
+// LOGIN
 exports.createLogin = (username, password) =>{
   const Users = mongoose.model("users", usersSchema);
 
-  Users.findOne({username: "david_wilson"}).then((result) => {
-    console.log(result, "result")
-  })
-
-  Users.findOne({username}).then((user)=>{
+  return Users.findOne({username})
+  .then((user)=>{
     console.log(username, "username")
-    console.log(user, "user")
-    bcrypt
-    .compare(password, user.password).then((passwordCheck)=>{
+    console.log(user.password, "hashed password")
+
+    return bcrypt.compare(password, user.password)
+    .then((passwordCheck)=>{
+
       console.log(`**${password}**, **${user.password}**`)
       console.log(passwordCheck)
+
       if(!passwordCheck){
-        console.log("I'm false")
         return Promise.reject({
           status: 400,
           msg: "Bad request", 
           details: "Password does not match"
         }) 
       }
+
       const token = jwt.sign({user_id: user._id, username: user.username}, "RANDOM-TOKEN", {expiresIn: "24h"})
       return {
         msg: "Login succesful",
+        user_id: user._id,
         username: user.username,
-        token
+        token,
       }
     })
     .catch((err) => Promise.reject(err));
