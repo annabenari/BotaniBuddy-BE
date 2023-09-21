@@ -1,10 +1,9 @@
 const { fetchPlants } = require("../models/plants.model")
 
 exports.getPlants = (request, response, next) => {
-    const {search} = request.body
-    const {userID} = request.params
+    const {user_id} = request.params
     
-    fetchPlants(search, userID)
+    fetchPlants(user_id)
     .then((result)=> {
         response.status(201).send({myPlants: result})
     })

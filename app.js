@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.post("/api/register", (postUser))
 app.post("/api/login", (postLogin))
-app.get("/api/users/user_id/plants", (getPlants))
+app.get("/api/users/:user_id/plants", (getPlants))
 
 
 app.use((request, response)=> {
