@@ -5,7 +5,7 @@ exports.getPlants = (request, response, next) => {
     
     fetchPlants(user_id)
     .then((result)=> {
-        response.status(201).send({myPlants: result})
+        response.status(200).send({myPlants: result})
     })
     .catch(next)
 

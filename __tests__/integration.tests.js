@@ -161,17 +161,15 @@ describe("POST /api/login allows a user to login on the app", () => {
 describe("GET /api/users/:user_id/plants to return owned plants", ()=>{
   test.only("Status 200: responds with owned plants", () => {
     const Users = mongoose.model("users", usersSchema);
-    Users.findOne()
+   return Users.findOne()
     .then((result) => {
             return request(app)
                 .get(`/api/users/${result._id}/plants`)
                 .expect(200)
                 .then((response) => {
-                    expect(response.body).toEqual({myPlants: [
-                        ObjectId("650c18d61ade59de81a785fd"),
-                        ObjectId("650c18d61ade59de81a78606"),
-                        ObjectId("650c18d61ade59de81a7860f")
-                    ]})
+                  console.log(response);
+                  console.log(result)
+                    expect(response.body).toEqual({myPlants: result})
                 })
                 })
     
