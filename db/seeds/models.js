@@ -7,7 +7,7 @@ const plantInfoSchema = new mongoose.Schema({
 
   scientificName: String,
 
-  maxHeight: Number,
+  maxHeight: String,
 
   wateringFrequency: String,
 
@@ -16,7 +16,7 @@ const plantInfoSchema = new mongoose.Schema({
     unit: String,
   },
 
-  sunglight: String,
+  sunlight: Array,
 
   pruningMonth: Array,
 
