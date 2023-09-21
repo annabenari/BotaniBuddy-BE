@@ -6,7 +6,6 @@ exports.fetchPlants = (user_id) =>{
     const Users = mongoose.model("users", usersSchema);
     return Users.findById(user_id)
     .then((user) => {
-        console.log(user, "user")
       if(user === null){
         return Promise.reject({
           status:404,
@@ -14,6 +13,12 @@ exports.fetchPlants = (user_id) =>{
           details: "No user found with this username"
         })
       }
+     //const array = user.plants.reverse();
+      const myPlants = {
+        result: user.plants,
+      };
+
+      return myPlants;
     })
     .catch((err) => Promise.reject(err));
 
