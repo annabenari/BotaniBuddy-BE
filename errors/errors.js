@@ -1,4 +1,7 @@
 exports.mongoErrors = ((error, request, response, next) => {
+
+    console.log(error, "mongoErrors")
+
     if (error.code===11000){
         response.status(400).send({
             msg: 'Bad request',
