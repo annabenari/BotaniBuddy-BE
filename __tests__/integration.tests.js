@@ -155,6 +155,8 @@ describe("POST /api/login allows a user to login on the app", () => {
             expect(body.detail).toBe("Invalid Input")
         })
   })  
-
-  
 });
+
+describe("GET /api/users/:user_id/plants to return owned plants", ()=>{
+  test("")
+})
