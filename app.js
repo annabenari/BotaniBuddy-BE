@@ -18,7 +18,8 @@ app.use(express.json());
 
 app.post("/api/register", (postUser))
 app.post("/api/login", (postLogin))
-app.post("/api/users/:user_id/identify_plants", (postPlantBySearch))
+app.post("/api/users/:user_id/add_by_search", (postPlantBySearch))
+
 
 
 app.use((request, response)=> {

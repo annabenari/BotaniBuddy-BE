@@ -1,9 +1,14 @@
-exports.postPlantBySearch = (request, response, next) =>{
-const {search} = request.body
+const {createPlantBySearch} = require("../models/search.model")
 
-createPlantBySearch(search)
+exports.postPlantBySearch = (request, response, next) =>{
+
+const {name} = request.body
+const {user_id} = request.params
+
+createPlantBySearch(name, user_id)
 .then((plant)=>{
-    response.status(200).send({result: plant})
+
+    response.status(201).send({result: plant})
 })
 .catch(next)
 }

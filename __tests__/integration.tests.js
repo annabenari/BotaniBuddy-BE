@@ -160,7 +160,7 @@ describe.only("POST /api/users/:user_id/add_by_search allows a user to add a pla
     return Users.find({}, null, { limit: 1 }).then(([user]) => {
       return request(app)
         .post(`/api/users/${user._id}/add_by_search`)
-        .send({ name: "monstera" })
+        .send({ name: "European Silver Fir" })
         .expect(201)
         .then(({ body: { plant } }) => {
           expect(plant).toHaveProperty("_id", expect.any(String));
