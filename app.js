@@ -4,6 +4,7 @@ const cors = require("cors");
 const {postUser, postLogin} = require('./controllers/login.controller')
 const {mongoErrors, customErrors} = require('./errors/errors');
 const mongoSanitize = require('express-mongo-sanitize');
+const { postPlantBySearch } = require('./controllers/search.controller');
 
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(express.json());
 
 app.post("/api/register", (postUser))
 app.post("/api/login", (postLogin))
+app.post("/api/users/:user_id/identify_plants", (postPlantBySearch))
 
 
 app.use((request, response)=> {
