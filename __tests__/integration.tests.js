@@ -197,18 +197,56 @@ describe("GET /api/users/:user_id/plants to return owned plants", ()=>{
   });
 })
 
-describe("GET /api/users/user_id/plants/plant_id to return specific user's plant", () => {
-  test.only("Status 200: responds with full description of plant", () => {
+describe("GET /api/users/:user_id/plants/:plant_id to return specific user's plant", () => {
+  test("Status 200: responds with full description of plant", () => {
     const Users = mongoose.model("users", usersSchema);
+    
     return Users.findOne({username: "jane_smith"})
       .then((result) => {
-        console.log(result)
         return request(app)
           .get(`/api/users/${result.id}/plants/${result.plants[0]}`)
           .expect(200)
           .then((response) => {
-            console.log(response.body)
+            expect(response.body.myPlant).toHaveProperty('commonName')
+            expect(response.body.myPlant).toHaveProperty('description')
+            expect(response.body.myPlant).toHaveProperty('indoor')
+            expect(response.body.myPlant).toHaveProperty('wateringPeriod')
+            expect(response.body.myPlant).toHaveProperty('poisonousToHumans')
+            expect(response.body.myPlant).toHaveProperty('poisonousToPets')
           })
       })
   })
+
+  test('Status 404: responds with error when plant_id doesnt exist', () => {
+    const Users = mongoose.model("users", usersSchema);
+    const madeUpId = new mongoose.Types.ObjectId("619d5ee25e7410e6270ce598")
+    return Users.findOne({username: "jane_smith"})
+      .then((result) => {
+        return request(app)
+          .get(`/api/users/${result.id}/plants/${madeUpId}`)
+          .expect(404)
+          .then((response) => {
+            expect(response.body.msg).toBe('Plant not found')
+          })
+      })
+  });
+
+  test.only('', () => {
+    const Users = mongoose.model("users", usersSchema);
+    const madeUpId = new mongoose.Types.ObjectId("619d5ee25e7410e6270ce598")
+    return Users.findOne({username: "jane_smith"})
+      .then((result) => {
+        return request(app)
+          .get(`/api/users/${result.id}/plants/nonesense`)
+          .expect(400)
+          .then((response) => {
+            console.log(response, 'in tests')
+            expect(response.body.msg).toBe('Wrong type used for plant_id')
+          })
+      })
+  });
+
+  test('', () => {
+    
+  });
 })
