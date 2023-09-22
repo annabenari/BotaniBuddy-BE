@@ -55,7 +55,8 @@ async function seed({PlantInfoData, PlantsData, UserInfoData}) {
   const plantId = await Plants.find({}, "_id", { limit: 1 })
   await Plants.findOneAndUpdate({_id: plantId[0]._id}, {users: userIdsArray});
   const allPlants = await Plants.find()
-
+  
+  await Users.create(UserInfoData[4])
 }
 
 module.exports = seed;
