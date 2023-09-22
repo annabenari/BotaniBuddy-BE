@@ -1,8 +1,6 @@
 const mongoose = require("mongoose")
 
-const ENV = process.env.URL || "development"
-
-console.log(ENV, "< ENV")
+const ENV = process.env.NODE_ENV || "development"
 
 require("dotenv").config({path: `${__dirname}/../.env.${ENV}`})
 
