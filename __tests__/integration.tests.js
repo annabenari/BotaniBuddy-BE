@@ -231,22 +231,45 @@ describe("GET /api/users/:user_id/plants/:plant_id to return specific user's pla
       })
   });
 
-  test.only('', () => {
+  test('Status 400: responds with error when given invalid plant_id type', () => {
     const Users = mongoose.model("users", usersSchema);
-    const madeUpId = new mongoose.Types.ObjectId("619d5ee25e7410e6270ce598")
     return Users.findOne({username: "jane_smith"})
       .then((result) => {
         return request(app)
           .get(`/api/users/${result.id}/plants/nonesense`)
           .expect(400)
           .then((response) => {
-            console.log(response, 'in tests')
-            expect(response.body.msg).toBe('Wrong type used for plant_id')
+            expect(response.body.msg).toBe('Invalid ID type')
           })
       })
   });
 
-  test('', () => {
+  test("Status 404: responds with an error when accessing a user that does not exist", () => {
+    const Users = mongoose.model("users", usersSchema);
+    const madeUpId = new mongoose.Types.ObjectId("619d5ee25e7410e6270ce598")
     
-  });
+    return Users.findOne({username: "jane_smith"})
+      .then((result) => {
+        return request(app)
+          .get(`/api/users/${madeUpId}/plants/${result.plants[0]}`)
+          .expect(404)
+          .then((response) => {
+            expect(response.body.msg).toBe('User not found')
+          })
+      })
+  })
+
+  test("Status 400: responds with an error when invalid type is given for user_id", () => {
+    const Users = mongoose.model("users", usersSchema);
+    
+    return Users.findOne({username: "jane_smith"})
+      .then((result) => {
+        return request(app)
+          .get(`/api/users/nonsense/plants/${result.plants[0]}`)
+          .expect(400)
+          .then((response) => {
+            expect(response.body.msg).toBe('Invalid ID type')
+          })
+      })
+  })
 })

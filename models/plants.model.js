@@ -3,7 +3,7 @@ const { usersSchema, plantInfoSchema, plantsSchema } = require("../db/seeds/mode
 
 
 exports.fetchPlants = (user_id) =>{
-    const Users = mongoose.model("users", usersSchema);
+    const Users = mongoose.model("Users", usersSchema);
     return Users.findById(user_id)
     .then((user) => {
       if(user === null){
@@ -23,13 +23,23 @@ exports.fetchPlants = (user_id) =>{
 
 }
 
-exports.fetchSpecificPlant = async (plant_id) => {
+exports.fetchSpecificPlant = async (user_id, plant_id) => {
   const Plants = await mongoose.model("Plants", plantsSchema)
-  const PlantInfo = await mongoose.model('PlantInfo', plantInfoSchema)
+  const PlantInfo = await mongoose.model("PlantInfo", plantInfoSchema)
+  const Users = await mongoose.model("Users", usersSchema)
 
   try{
+    const user = await Users.findById(user_id)
+
+    if(!user) {
+      return Promise.reject({
+        status: 404,
+        msg: 'User not found',
+        details: 'No user found with this ID'
+      })
+    }
+
     const plant = await Plants.findById(plant_id)
-    console.log(plant, 'in model')
 
     if(!plant) {
       return Promise.reject({
@@ -42,15 +52,13 @@ exports.fetchSpecificPlant = async (plant_id) => {
       const myPlant = {
         result: plantinfo
       }
-      console.log(plantinfo, 'in model plant info')
       return myPlant
+      
     } catch (error) {
-      console.log('its me')
-      Promise.reject({
+      throw {
         status: 400,
         msg: 'Invalid ID type',
         details: 'Plant_id must be type: mongoose.Types.ObjectId'
-
-      })
+      }
     }
 }

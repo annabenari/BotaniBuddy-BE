@@ -12,9 +12,9 @@ exports.getPlants = (request, response, next) => {
 }
 
 exports.getSpecificPlant = (request, response, next) => {
-    const {plant_id} = request.params
+    const {user_id, plant_id} = request.params
 
-    fetchSpecificPlant(plant_id)
+    fetchSpecificPlant(user_id, plant_id)
     .then(({result}) => {
         response.status(200).send({myPlant: result})
     })
