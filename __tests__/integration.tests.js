@@ -180,4 +180,20 @@ describe("GET /api/users/:user_id/plants to return owned plants", ()=>{
       console.log(result)
     })
   });
+
+  test('Status 400: responds with an error when user doesnt exist', () => {
+    const Users = mongoose.model("users", usersSchema);
+    const madeUpId = 123123123123123
+    return request(app)
+    .get(`/api/users/1/plants`)
+    .expect(400)
+    .then((response) => {
+       Users.findById(1)
+      .then((result) => {
+        console.log(result)
+      })
+    })
+
+    
+  });
 })
