@@ -5,8 +5,8 @@
   "main": "listen.js",
   "scripts": {
     "test": "jest",
-    "seed": "node ./db/seeds/runseed.js"
-
+    "seed": "node ./db/seeds/runseed.js",
+    "start": "node listen.js"
   },
   "keywords": [],
   "author": "",
