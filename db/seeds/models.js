@@ -2,9 +2,12 @@ const mongoose = require("mongoose");
 
 const plantInfoSchema = new mongoose.Schema({
   perenualId: Number,
+
   commonName: String,
   scientificName: String,
+
   maxHeight: String,
+
   wateringFrequency: String,
 
   wateringPeriod: {
