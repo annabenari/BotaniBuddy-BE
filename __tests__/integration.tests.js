@@ -181,19 +181,19 @@ describe("GET /api/users/:user_id/plants to return owned plants", ()=>{
     })
   });
 
-  test('Status 400: responds with an error when user doesnt exist', () => {
+  test('Status 404: responds with an error when user doesnt exist', () => {
     const Users = mongoose.model("users", usersSchema);
-    const madeUpId = 123123123123123
+    const madeUpId = new mongoose.Types.ObjectId("619d5ee25e7410e6270ce598")
     return request(app)
-    .get(`/api/users/1/plants`)
-    .expect(400)
+    .get(`/api/users/${madeUpId}/plants`)
+    .expect(404)
     .then((response) => {
-       Users.findById(1)
-      .then((result) => {
-        console.log(result)
-      })
+       return Users.findById(madeUpId)
+       .then((result) => {
+        expect(response.body.msg).toBe('Not Found')
+       })
     })
-
-    
   });
+
+
 })
