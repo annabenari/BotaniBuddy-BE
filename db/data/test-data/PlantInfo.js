@@ -72,7 +72,7 @@ module.exports = [
     maxHeight: "30 feet",
     wateringFrequency: "Average",
     wateringPeriod: {
-      value: "0",
+      value: "7",
       unit: "days",
     },
     sunlight: ["full sun"],

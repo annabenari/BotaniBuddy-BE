@@ -39,15 +39,17 @@ const plantInfoSchema = new mongoose.Schema({
 });
 
 const usersSchema = new mongoose.Schema({
-  username: {type: String, required: true, unique: true},
-  password: {type: String, required: true},
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
   plants: [mongoose.Schema.Types.ObjectId],
 });
 
 const plantsSchema = new mongoose.Schema({
-  tasks: mongoose.Schema.Types.Mixed,
+  tasks: {
+    toBeWateredAgain: String,
+  },
   users: [mongoose.Schema.Types.ObjectId],
-  plantType: mongoose.Schema.Types.ObjectId,
+  plantType: Number,
 });
 
 module.exports = { plantInfoSchema, usersSchema, plantsSchema };
