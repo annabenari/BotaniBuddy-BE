@@ -195,6 +195,20 @@ describe("GET /api/users/:user_id/plants to return owned plants", ()=>{
         expect(response.body.msg).toBe('Not Found')
     })
   });
+})
 
-
+describe("GET /api/users/user_id/plants/plant_id to return specific user's plant", () => {
+  test.only("Status 200: responds with full description of plant", () => {
+    const Users = mongoose.model("users", usersSchema);
+    return Users.findOne({username: "jane_smith"})
+      .then((result) => {
+        console.log(result)
+        return request(app)
+          .get(`/api/users/${result.id}/plants/${result.plants[0]}`)
+          .expect(200)
+          .then((response) => {
+            console.log(response.body)
+          })
+      })
+  })
 })
