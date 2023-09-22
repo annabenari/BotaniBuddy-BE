@@ -29,7 +29,7 @@ async function seed({PlantInfoData, PlantsData, UserInfoData}) {
       _id: plantId,
       ...PlantsData[index],
       users: [userId],
-      plantType: plantInfoId,
+      plantType: index + 1,
     });
     await Users.create({
       _id: userId,
