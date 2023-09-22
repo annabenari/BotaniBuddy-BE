@@ -7,9 +7,8 @@ const mongoSanitize = require('express-mongo-sanitize');
 const { getPlants } = require('./controllers/plants.controller');
 const { postPlantBySearch } = require('./controllers/search.controller');
 
-
-const app = express();
 database()
+const app = express();
 
 app.use(cors());
 app.use(express.json());
