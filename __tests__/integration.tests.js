@@ -153,7 +153,43 @@ describe("POST /api/login allows a user to login on the app", () => {
       });
   });
 });
+describe("GET /api/users/:user_id/plants to return owned plants", () => {
+  test("Status 200: responds with owned plants", async () => {
+    const Users = await mongoose.model("users", usersSchema);
+    return Users.findOne().then((result) => {
+      return request(app)
+        .get(`/api/users/${result._id}/plants`)
+        .expect(200)
+        .then((response) => {
+          expect(JSON.stringify(response.body.myPlants)).toBe(
+            JSON.stringify(result.plants)
+          );
+        });
+    });
+  });
 
+  test("Status 200: responds with an empty array when owned plants is empty", () => {
+    const Users = mongoose.model("users", usersSchema);
+    return Users.findOne({ username: "billy-bean12" }).then((result) => {
+      return request(app)
+        .get(`/api/users/${result._id}/plants`)
+        .expect(200)
+        .then((response) => {
+          expect(response.body.myPlants).toHaveLength(0);
+        });
+    });
+  });
+
+  test("Status 404: responds with an error when user doesnt exist", () => {
+    const madeUpId = new mongoose.Types.ObjectId("619d5ee25e7410e6270ce598");
+    return request(app)
+      .get(`/api/users/${madeUpId}/plants`)
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Not Found");
+      });
+  });
+});
 describe("POST /api/users/:user_id/add_by_search allows a user to add a plant they have searched for", () => {
   test("Status 201: creates a new plant in user's plants for a plant that already exists in PlantInfos", () => {
     const Users = mongoose.model("users", usersSchema);
@@ -173,7 +209,7 @@ describe("POST /api/users/:user_id/add_by_search allows a user to add a plant th
         });
     });
   });
-  test('Status 201: plant does not already exist in PlantInfos and gets added', ()=> {
+  test("Status 201: plant does not already exist in PlantInfos and gets added", () => {
     const Users = mongoose.model("users", usersSchema);
     return Users.find({}, null, { limit: 1 }).then(([user]) => {
       return request(app)
@@ -190,7 +226,7 @@ describe("POST /api/users/:user_id/add_by_search allows a user to add a plant th
           expect(plant).toHaveProperty("plantType", expect.any(Number));
         });
     });
-  })
+  });
   test("Status 201: plant does exist but watering period is null", () => {
     const Users = mongoose.model("users", usersSchema);
     return Users.find({}, null, { limit: 1 }).then(([user]) => {
@@ -208,7 +244,7 @@ describe("POST /api/users/:user_id/add_by_search allows a user to add a plant th
           expect(plant).toHaveProperty("plantType", expect.any(Number));
         });
     });
-  })
+  });
   test("Status 201: plant does exist but watering period unit (eg no days/months) is null", () => {
     const Users = mongoose.model("users", usersSchema);
     return Users.find({}, null, { limit: 1 }).then(([user]) => {
@@ -226,7 +262,7 @@ describe("POST /api/users/:user_id/add_by_search allows a user to add a plant th
           expect(plant).toHaveProperty("plantType", expect.any(Number));
         });
     });
-  })
+  });
   test("Status 404: plant not found eg wrong spelling", () => {
     const Users = mongoose.model("users", usersSchema);
     return Users.find({}, null, { limit: 1 }).then(([user]) => {
@@ -234,11 +270,11 @@ describe("POST /api/users/:user_id/add_by_search allows a user to add a plant th
         .post(`/api/users/${user._id}/add_by_search`)
         .send({ name: "White Furry" })
         .expect(404)
-        .then(({body : {msg}}) => {
-          expect(msg).toBe("Plant not found")
-        })
-    })
-  })
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Plant not found");
+        });
+    });
+  });
   test("Status 400: plant outside of free Perenual range (i.e. > 3000)", () => {
     const Users = mongoose.model("users", usersSchema);
     return Users.find({}, null, { limit: 1 }).then(([user]) => {
@@ -246,11 +282,11 @@ describe("POST /api/users/:user_id/add_by_search allows a user to add a plant th
         .post(`/api/users/${user._id}/add_by_search`)
         .send({ name: "monstera" })
         .expect(400)
-        .then(({body : {msg}}) => {
-          expect(msg).toBe("Plant species outside of free range of Perenual")
-        })
-    })
-  })
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Plant species outside of free range of Perenual");
+        });
+    });
+  });
   test("Status 400: malformed body", () => {
     const Users = mongoose.model("users", usersSchema);
     return Users.find({}, null, { limit: 1 }).then(([user]) => {
@@ -258,14 +294,9 @@ describe("POST /api/users/:user_id/add_by_search allows a user to add a plant th
         .post(`/api/users/${user._id}/add_by_search`)
         .send({ bananas: true })
         .expect(400)
-        .then(({body : {msg}}) => {
-          expect(msg).toBe("Bad Request")
-        })
-    })
-  })
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Bad Request");
+        });
+    });
+  });
 });
-/*
-plant not found 404
-plant species > 3000 400 with message
-{bananas: true 400}
-*/

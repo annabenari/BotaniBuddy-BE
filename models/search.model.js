@@ -93,7 +93,7 @@ exports.createPlantBySearch = async (name, user_id) => {
 
       const insertIntoPlants = new Plants({
         tasks: {
-          tobeWateredAgain: dayjs()
+          toBeWateredAgain: dayjs()
             .add(getWateringPeriod, wateringTime)
             .format("DD-MM-YYYY"),
         },

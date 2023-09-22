@@ -1,10 +1,9 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
 module.exports = [
   {
     tasks: {
-      task1: "Water the plant",
-      task2: "Prune the leaves",
+      toBeWateredAgain: "21-09-2050",
     },
     users: [],
     plantType: new mongoose.Types.ObjectId(),
@@ -12,8 +11,7 @@ module.exports = [
 
   {
     tasks: {
-      task1: "Fertilize the soil",
-      task2: "Rotate the pot",
+      toBeWateredAgain: "21-09-2003",
     },
     users: [],
     plantType: new mongoose.Types.ObjectId(),
@@ -21,8 +19,7 @@ module.exports = [
 
   {
     tasks: {
-      task1: "Provide support",
-      task2: "Harvest the flowers",
+      toBeWateredAgain: "21-09-2053",
     },
     users: [],
     plantType: new mongoose.Types.ObjectId(),
@@ -30,12 +27,9 @@ module.exports = [
 
   {
     tasks: {
-      task1: "Monitor for pests",
-      task2: "Repot when needed",
+      toBeWateredAgain: "21-09-2003",
     },
     users: [],
     plantType: new mongoose.Types.ObjectId(),
   },
 ];
-
-

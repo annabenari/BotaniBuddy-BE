@@ -22,5 +22,11 @@ module.exports = [
     password: "password123",
     plants: [],
   },
+
+  {
+    username: "billy-bean12",
+    password: "thebean24",
+    plants: [],
+  },
 ];
 
