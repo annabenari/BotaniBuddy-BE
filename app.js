@@ -10,11 +10,10 @@ const { postPlantBySearch } = require('./controllers/search.controller');
 const app = express();
 database()
 
-app.use(mongoSanitize())
-
 app.use(cors());
 app.use(express.json());
 
+app.use(mongoSanitize())
 
 app.post("/api/register", (postUser))
 app.post("/api/login", (postLogin))
