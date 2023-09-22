@@ -8,7 +8,7 @@ const { mongoErrors, customErrors } = require("./errors/errors");
 const { getHello } = require("./controllers/getHello.controller");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 9090;
 const MONGO_URI = process.env.MONGO_URI;
 
 app.use(mongoSanitize());
