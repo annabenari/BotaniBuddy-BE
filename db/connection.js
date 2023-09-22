@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const listen = require("../listen");
 
 const ENV = process.env.URL || "development";
 
@@ -15,15 +16,5 @@ async function connection() {
   await mongoose.connect(URL);
   console.log("after connection");
 }
-
-// const connectDB = async () => {
-//     try {
-//       const conn = await mongoose.connect(process.env.MONGO_URI);
-//       console.log(`MongoDB Connected: ${conn.connection.host}`);
-//     } catch (error) {
-//       console.log(error);
-//       process.exit(1);
-//     }
-//   }
 
 module.exports = connection;

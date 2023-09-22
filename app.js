@@ -5,8 +5,8 @@ const { postUser, postLogin } = require("./controllers/login.controller");
 const { mongoErrors, customErrors } = require("./errors/errors");
 const mongoSanitize = require("express-mongo-sanitize");
 
-const app = express();
 database();
+const app = express();
 
 app.use(mongoSanitize());
 
