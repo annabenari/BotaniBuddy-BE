@@ -8,8 +8,8 @@ const plantInfoSchema = new mongoose.Schema({
   wateringFrequency: String,
 
   wateringPeriod: {
-    value: String,
-    unit: String,
+    value: {type: String, default: "7"},
+    unit: {type: String, default: "days"},
   },
 
   sunlight: Array,
@@ -43,7 +43,7 @@ const usersSchema = new mongoose.Schema({
 const plantsSchema = new mongoose.Schema({
   tasks: mongoose.Schema.Types.Mixed,
   users: [mongoose.Schema.Types.ObjectId],
-  plantType: Number,   //perunial id
+  plantType: Number,
 });
 
 module.exports = { plantInfoSchema, usersSchema, plantsSchema };

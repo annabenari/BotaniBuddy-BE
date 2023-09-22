@@ -2,7 +2,7 @@ const database = require('./db/connection')
 const express = require("express");
 const cors = require("cors");
 const {postUser, postLogin} = require('./controllers/login.controller')
-const {mongoErrors, customErrors} = require('./errors/errors');
+const {mongoErrors, customErrors, axiosErrors} = require('./errors/errors');
 const mongoSanitize = require('express-mongo-sanitize');
 const { postPlantBySearch } = require('./controllers/search.controller');
 
@@ -26,6 +26,7 @@ app.use((request, response)=> {
 })
 
 app.use(mongoErrors)
+app.use(axiosErrors)
 app.use(customErrors)
 
 

@@ -181,9 +181,6 @@ describe("POST /api/users/:user_id/add_by_search allows a user to add a plant th
         .send({ name: "Pixie Japanese Maple" })
         .expect(201)
         .then(({ body: { plant } }) => {
-
-          console.log(typeof plant._id)
-
           expect(plant).toHaveProperty("_id", expect.any(String));
           expect(plant).toHaveProperty("tasks", expect.any(Object));
           expect(plant).toHaveProperty(
@@ -194,5 +191,81 @@ describe("POST /api/users/:user_id/add_by_search allows a user to add a plant th
         });
     });
   })
+  test("Status 201: plant does exist but watering period is null", () => {
+    const Users = mongoose.model("users", usersSchema);
+    return Users.find({}, null, { limit: 1 }).then(([user]) => {
+      return request(app)
+        .post(`/api/users/${user._id}/add_by_search`)
+        .send({ name: "Fraser Fir" })
+        .expect(201)
+        .then(({ body: { plant } }) => {
+          expect(plant).toHaveProperty("_id", expect.any(String));
+          expect(plant).toHaveProperty("tasks", expect.any(Object));
+          expect(plant).toHaveProperty(
+            "users",
+            expect.arrayContaining([user._id.toString()])
+          );
+          expect(plant).toHaveProperty("plantType", expect.any(Number));
+        });
+    });
+  })
+  test("Status 201: plant does exist but watering period unit (eg no days/months) is null", () => {
+    const Users = mongoose.model("users", usersSchema);
+    return Users.find({}, null, { limit: 1 }).then(([user]) => {
+      return request(app)
+        .post(`/api/users/${user._id}/add_by_search`)
+        .send({ name: "White Fir" })
+        .expect(201)
+        .then(({ body: { plant } }) => {
+          expect(plant).toHaveProperty("_id", expect.any(String));
+          expect(plant).toHaveProperty("tasks", expect.any(Object));
+          expect(plant).toHaveProperty(
+            "users",
+            expect.arrayContaining([user._id.toString()])
+          );
+          expect(plant).toHaveProperty("plantType", expect.any(Number));
+        });
+    });
+  })
+  test("Status 404: plant not found eg wrong spelling", () => {
+    const Users = mongoose.model("users", usersSchema);
+    return Users.find({}, null, { limit: 1 }).then(([user]) => {
+      return request(app)
+        .post(`/api/users/${user._id}/add_by_search`)
+        .send({ name: "White Furry" })
+        .expect(404)
+        .then(({body : {msg}}) => {
+          expect(msg).toBe("Plant not found")
+        })
+    })
+  })
+  test("Status 400: plant outside of free Perenual range (i.e. > 3000)", () => {
+    const Users = mongoose.model("users", usersSchema);
+    return Users.find({}, null, { limit: 1 }).then(([user]) => {
+      return request(app)
+        .post(`/api/users/${user._id}/add_by_search`)
+        .send({ name: "monstera" })
+        .expect(400)
+        .then(({body : {msg}}) => {
+          expect(msg).toBe("Plant species outside of free range of Perenual")
+        })
+    })
+  })
+  test("Status 400: malformed body", () => {
+    const Users = mongoose.model("users", usersSchema);
+    return Users.find({}, null, { limit: 1 }).then(([user]) => {
+      return request(app)
+        .post(`/api/users/${user._id}/add_by_search`)
+        .send({ bananas: true })
+        .expect(400)
+        .then(({body : {msg}}) => {
+          expect(msg).toBe("Bad Request")
+        })
+    })
+  })
 });
-//Test to check if watering period is null
+/*
+plant not found 404
+plant species > 3000 400 with message
+{bananas: true 400}
+*/

@@ -51,7 +51,7 @@ module.exports = [
     wateringFrequency: "Average",
     wateringPeriod: {
       value: "7-10",
-      unit: "days",
+      unit: null,
     },
     sunlight: ["Full sun", "part shade"],
     pruningMonth: ["February", "March", "April"],
@@ -72,7 +72,7 @@ module.exports = [
     maxHeight: "30 feet",
     wateringFrequency: "Average",
     wateringPeriod: {
-      value: "0",
+      value: "7",
       unit: "days",
     },
     sunlight: ["full sun"],
