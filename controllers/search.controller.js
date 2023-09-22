@@ -8,7 +8,7 @@ const {user_id} = request.params
 createPlantBySearch(name, user_id)
 .then((plant)=>{
 
-    response.status(201).send({result: plant})
+    response.status(201).send({plant})
 })
 .catch(next)
 }

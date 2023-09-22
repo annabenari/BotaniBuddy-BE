@@ -154,8 +154,8 @@ describe("POST /api/login allows a user to login on the app", () => {
   });
 });
 
-describe.only("POST /api/users/:user_id/add_by_search allows a user to add a plant they have searched for", () => {
-  test("Status 201: creates a new plant in user's plants", () => {
+describe("POST /api/users/:user_id/add_by_search allows a user to add a plant they have searched for", () => {
+  test("Status 201: creates a new plant in user's plants for a plant that already exists in PlantInfos", () => {
     const Users = mongoose.model("users", usersSchema);
     return Users.find({}, null, { limit: 1 }).then(([user]) => {
       return request(app)
@@ -167,10 +167,32 @@ describe.only("POST /api/users/:user_id/add_by_search allows a user to add a pla
           expect(plant).toHaveProperty("tasks", expect.any(Object));
           expect(plant).toHaveProperty(
             "users",
-            expect.arrayContaining([user._id])
+            expect.arrayContaining([user._id.toString()])
           );
-          expect(plant).toHaveProperty("plantType", expect.any(String));
+          expect(plant).toHaveProperty("plantType", expect.any(Number));
         });
     });
   });
+  test('Status 201: plant does not already exist in PlantInfos and gets added', ()=> {
+    const Users = mongoose.model("users", usersSchema);
+    return Users.find({}, null, { limit: 1 }).then(([user]) => {
+      return request(app)
+        .post(`/api/users/${user._id}/add_by_search`)
+        .send({ name: "Pixie Japanese Maple" })
+        .expect(201)
+        .then(({ body: { plant } }) => {
+
+          console.log(typeof plant._id)
+
+          expect(plant).toHaveProperty("_id", expect.any(String));
+          expect(plant).toHaveProperty("tasks", expect.any(Object));
+          expect(plant).toHaveProperty(
+            "users",
+            expect.arrayContaining([user._id.toString()])
+          );
+          expect(plant).toHaveProperty("plantType", expect.any(Number));
+        });
+    });
+  })
 });
+//Test to check if watering period is null

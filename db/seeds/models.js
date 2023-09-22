@@ -2,13 +2,9 @@ const mongoose = require("mongoose");
 
 const plantInfoSchema = new mongoose.Schema({
   perenualId: Number,
-
   commonName: String,
-
   scientificName: String,
-
   maxHeight: String,
-
   wateringFrequency: String,
 
   wateringPeriod: {
@@ -47,7 +43,7 @@ const usersSchema = new mongoose.Schema({
 const plantsSchema = new mongoose.Schema({
   tasks: mongoose.Schema.Types.Mixed,
   users: [mongoose.Schema.Types.ObjectId],
-  plantType: mongoose.Schema.Types.ObjectId,
+  plantType: Number,   //perunial id
 });
 
 module.exports = { plantInfoSchema, usersSchema, plantsSchema };
