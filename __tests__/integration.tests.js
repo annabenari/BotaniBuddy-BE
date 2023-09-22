@@ -172,4 +172,12 @@ describe("GET /api/users/:user_id/plants to return owned plants", ()=>{
                 })
     
   })
+
+  test('Status 200: responds with an empty array when owned plants is empty', () => {
+    const Users = mongoose.model("users", usersSchema);
+    return Users.find()
+    .then((result) => {
+      console.log(result)
+    })
+  });
 })
