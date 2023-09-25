@@ -5,6 +5,7 @@ const request = require("supertest");
 const mongoose = require("mongoose");
 const testData = require("../db/data/test-data/index");
 const { usersSchema } = require("../db/seeds/models");
+const formData = require("./assets/formData");
 
 beforeEach(async () => {
   await seed(testData);
@@ -300,3 +301,69 @@ describe("POST /api/users/:user_id/add_by_search allows a user to add a plant th
     });
   });
 });
+
+describe("POST /api/users/:user_id/identify_plants_image finds the name of a plant by sending an image", () => {
+  it("Status 201: returns name of a plant when given an image of the plant", async () => {
+    const Users = mongoose.model("users", usersSchema);
+    return Users.find({}, null, { limit: 1 }).then(([user]) => {
+      return request(app)
+        .post(`/api/users/${user._id}/identify_plants_image`)
+        .set(
+          "Content-Type",
+          `multipart/form-data; boundary=${formData._boundary}`
+        )
+        .attach(
+          "image",
+          "__tests__/assets/Abies_alba_Mount_Auburn_Cemetery.jpg"
+        )
+        .expect(201)
+        .then(({ body }) => {
+          const { plantName, score } = body;
+          expect(plantName).toBe("Abies alba");
+          expect(score).toEqual(expect.any(Number));
+        });
+    });
+  }, 10000);
+  it("Status 400: should return invalid user id when given an invalid id", () => {
+    return request(app)
+      .post(`/api/users/1/identify_plants_image`)
+      .set(
+        "Content-Type",
+        `multipart/form-data; boundary=${formData._boundary}`
+      )
+      .attach("image", "__tests__/assets/Abies_alba_Mount_Auburn_Cemetery.jpg")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+        expect(body.detail).toBe("Invalid user id");
+      });
+  });
+  it("Status 400: should return invalid user id when given a user that doesn't exist", () => {
+    return request(app)
+      .post(`/api/users/65116a3770efda3e0b3cb53b/identify_plants_image`)
+      .set(
+        "Content-Type",
+        `multipart/form-data; boundary=${formData._boundary}`
+      )
+      .attach("image", "__tests__/assets/Abies_alba_Mount_Auburn_Cemetery.jpg")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+        expect(body.detail).toBe("User does not exist");
+      });
+  });
+  it("Status 201: returns name of a plant when given an image of the plant", async () => {
+    const Users = mongoose.model("users", usersSchema);
+    return Users.find({}, null, { limit: 1 }).then(([user]) => {
+      return request(app)
+        .post(`/api/users/${user._id}/identify_plants_image`)
+        .send({})
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad request");
+          expect(body.detail).toBe("Invalid body");
+        });
+    });
+  });
+});
+
