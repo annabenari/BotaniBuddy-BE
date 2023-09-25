@@ -17,8 +17,8 @@ exports.createPlantBySearch = async (name, user_id) => {
   if (name === undefined) {
     return Promise.reject({
       status: 400,
-      msg: "Bad Request"
-    })
+      msg: "Bad Request",
+    });
   }
 
   //Make get request for base data
@@ -31,7 +31,7 @@ exports.createPlantBySearch = async (name, user_id) => {
         return Promise.reject({
           status: 404,
           msg: "Plant not found",
-        })
+        });
       }
 
       const existsAlready = await PlantInfo.find({
@@ -39,11 +39,11 @@ exports.createPlantBySearch = async (name, user_id) => {
       });
 
       if (existsAlready.length === 1) {
-        if (!existsAlready[0].wateringPeriod.value){
-          existsAlready[0].wateringPeriod.value = "7"
+        if (!existsAlready[0].wateringPeriod.value) {
+          existsAlready[0].wateringPeriod.value = "7";
         }
-        if (!existsAlready[0].wateringPeriod.unit){
-          existsAlready[0].wateringPeriod.unit = "days"
+        if (!existsAlready[0].wateringPeriod.unit) {
+          existsAlready[0].wateringPeriod.unit = "days";
         }
         return existsAlready[0];
       } else {
@@ -116,6 +116,55 @@ exports.createPlantBySearch = async (name, user_id) => {
       return Plants.findById(latestPlant);
     })
     .catch((error) => {
-      return Promise.reject(error)
+      return Promise.reject(error);
+    });
+};
+
+exports.returnIdentifiedImage = async (buffer, user_id) => {
+  const Users = await mongoose.model("users", usersSchema);
+  let user;
+  try {
+    user = await Users.findById(user_id);
+  } catch {
+    return Promise.reject({
+      status: 400,
+      msg: "Bad request",
+      details: "Invalid user id",
+    });
+  }
+  if (!user) {
+    return Promise.reject({
+      status: 400,
+      msg: "Bad request",
+      details: "User does not exist",
+    });
+  }
+  let formData;
+  try {
+    const arrayBuffer = new Uint8Array(buffer).buffer;
+    const toSend = new File([arrayBuffer], "images");
+    formData = new FormData();
+    formData.append("images", toSend);
+  } catch {
+    return Promise.reject({
+      status: 400,
+      msg: "Bad request",
+      details: "Malformed body",
+    });
+  }
+  return axios
+    .post(
+      "https://my-api.plantnet.org/v2/identify/all?api-key=2b10GLsEqAO1ADYfA8O1lgyO",
+      formData,
+      {
+        headers: {
+          "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+        },
+      }
+    )
+    .then(({ data: { results } }) => {
+      const score = results[0].score;
+      const plantName = results[0].species.scientificNameWithoutAuthor;
+      return { score, plantName };
     });
 };
