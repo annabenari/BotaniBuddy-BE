@@ -142,11 +142,11 @@ exports.returnIdentifiedImage = async (buffer, user_id) => {
   try {
     console.log(buffer)
     const arrayBuffer = new Uint8Array(buffer).buffer;
-    console.log(toSend, "arrayBuffer")
+    console.log(arrayBuffer, "arrayBuffer")
     const toSend = new File([arrayBuffer], "images");
     console.log(toSend, "toSend")
     formData = new FormData();
-    console.log(formdata, "formData")
+    console.log(formData, "formData")
     formData.append("images", toSend);
   } catch {
     return Promise.reject({
