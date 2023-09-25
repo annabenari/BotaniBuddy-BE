@@ -22,11 +22,11 @@ exports.axiosErrors = (error, request, response, next) => {
         msg: "Plant species outside of free range of Perenual",
       });
     }
-})
   } else {
     next(error);
   }
-};
+}
+
 
 
 exports.customErrors = (error, request, response, next) => {

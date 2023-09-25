@@ -269,7 +269,6 @@ describe("GET /api/users/:user_id/plants/:plant_id to return specific user's pla
   })
 })
 
-});
 describe("POST /api/users/:user_id/add_by_search allows a user to add a plant they have searched for", () => {
   test("Status 201: creates a new plant in user's plants for a plant that already exists in PlantInfos", () => {
     const Users = mongoose.model("users", usersSchema);
