@@ -65,5 +65,4 @@ exports.fetchSpecificPlant = async (user_id, plant_id) => {
     }
 }
 
-};
 
