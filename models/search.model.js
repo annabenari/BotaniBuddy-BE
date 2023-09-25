@@ -143,7 +143,7 @@ exports.returnIdentifiedImage = async (buffer, user_id) => {
     console.log(buffer)
     const arrayBuffer = new Uint8Array(buffer).buffer;
     console.log(arrayBuffer, "arrayBuffer")
-    const toSend = new File([arrayBuffer], "images");
+    const toSend = new Blob([arrayBuffer]);
     console.log(toSend, "toSend")
     formData = new FormData();
     console.log(formData, "formData")
