@@ -148,7 +148,8 @@ exports.returnIdentifiedImage = async (buffer, user_id) => {
     formData = new FormData();
     console.log(formData, "formData")
     formData.append("images", toSend);
-  } catch {
+  } catch (error) {
+    console.log(error)
     return Promise.reject({
       status: 400,
       msg: "Bad request",
