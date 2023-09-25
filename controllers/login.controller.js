@@ -1,4 +1,3 @@
-const { use } = require('../app')
 const {createUser, createLogin} = require('../models/login.model')
 
 exports.postUser = (request, response, next) => {

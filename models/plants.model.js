@@ -2,16 +2,17 @@ const mongoose = require("mongoose");
 const { usersSchema, plantInfoSchema, plantsSchema } = require("../db/seeds/models");
 
 
+
 exports.fetchPlants = (user_id) =>{
     const Users = mongoose.model("Users", usersSchema);
     return Users.findById(user_id)
     .then((user) => {
-      if(user === null){
+      if (user === null) {
         return Promise.reject({
-          status:404,
+          status: 404,
           msg: "Not Found",
-          details: "No user found with this username"
-        })
+          details: "No user found with this username",
+        });
       }
       const myPlants = {
         result: user.plants,
@@ -20,6 +21,7 @@ exports.fetchPlants = (user_id) =>{
       return myPlants;
     })
     .catch((err) => Promise.reject(err));
+
 
 }
 
@@ -62,3 +64,6 @@ exports.fetchSpecificPlant = async (user_id, plant_id) => {
       }
     }
 }
+
+};
+
