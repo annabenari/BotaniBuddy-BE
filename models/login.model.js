@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const { usersSchema } = require("../db/seeds/models");
 
+//REGISTER
 exports.createUser = (username, password) => {
   if (password === undefined) {
     return Promise.reject({

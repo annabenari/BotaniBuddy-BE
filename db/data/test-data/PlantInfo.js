@@ -51,7 +51,7 @@ module.exports = [
     wateringFrequency: "Average",
     wateringPeriod: {
       value: "7-10",
-      unit: "days",
+      unit: null,
     },
     sunlight: ["Full sun", "part shade"],
     pruningMonth: ["February", "March", "April"],
@@ -89,3 +89,4 @@ module.exports = [
     description: "Candicans White Fir is one of the most amazing species of fir tree. Its vibrant, powdery-white needles make it a real show-stopper in the winter and spring. The light color is also resistant to bronzing or discoloration, so the brilliant hue is maintained for many years. It also has a unique branch structure with a strong central leader and shorter lateral branches creating an eye-catching silhouette. This species is hardy and tolerant to a variety of soil types, making it a great choice for difficult areas. Its fast growth rate creates an impressive display quickly, making it an excellent choice to add curb appeal to your landscape.",
   },
 ];
+
