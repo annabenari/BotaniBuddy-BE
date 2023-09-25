@@ -14,7 +14,7 @@ const {
 } = require("./controllers/search.controller");
 
 const app = express();
-database();
+database()
 
 app.use(cors());
 app.use(express.json());

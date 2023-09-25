@@ -6,7 +6,6 @@ const {
   usersSchema,
 } = require("../db/seeds/models");
 const dayjs = require("dayjs");
-const { get } = require("../app");
 
 exports.createPlantBySearch = async (name, user_id) => {
   //Connect to tables
