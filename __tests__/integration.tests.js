@@ -4,6 +4,7 @@ const seed = require("../db/seeds/seed");
 const request = require("supertest");
 const mongoose = require("mongoose");
 const testData = require("../db/data/test-data/index");
+const { usersSchema } = require("../db/seeds/models");
 
 beforeEach(async () => {
   await seed(testData);
@@ -155,6 +156,45 @@ describe("POST /api/login allows a user to login on the app", () => {
             expect(body.detail).toBe("Invalid Input")
         })
   })  
-
-  
 });
+
+describe("GET /api/users/:user_id/plants to return owned plants", ()=>{
+  test("Status 200: responds with owned plants", async () => {
+    const Users = await mongoose.model("users", usersSchema);
+   return Users.findOne()
+    .then((result) => {
+            return request(app)
+                .get(`/api/users/${result._id}/plants`)
+                .expect(200)
+                .then((response) => {
+                    expect(JSON.stringify(response.body.myPlants)).toBe(JSON.stringify(result.plants))
+                })
+                })
+    
+  })
+
+  test('Status 200: responds with an empty array when owned plants is empty', () => {
+    const Users = mongoose.model("users", usersSchema);
+    return Users.findOne({username: "billy-bean12"})
+    .then((result) => {
+      return request(app)
+        .get(`/api/users/${result._id}/plants`)
+        .expect(200)
+        .then((response) => {
+          expect(response.body.myPlants).toHaveLength(0);
+        })
+    })
+  });
+
+  test('Status 404: responds with an error when user doesnt exist', () => {
+    const madeUpId = new mongoose.Types.ObjectId("619d5ee25e7410e6270ce598")
+    return request(app)
+    .get(`/api/users/${madeUpId}/plants`)
+    .expect(404)
+    .then((response) => {
+        expect(response.body.msg).toBe('Not Found')
+    })
+  });
+
+
+})
