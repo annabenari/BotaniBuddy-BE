@@ -25,7 +25,9 @@ exports.axiosErrors = (error, request, response, next) => {
   } else {
     next(error);
   }
-};
+}
+
+
 
 exports.customErrors = (error, request, response, next) => {
   console.log(error)

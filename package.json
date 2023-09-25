@@ -2,12 +2,12 @@
   "name": "botanibuddy-be",
   "version": "1.0.0",
   "description": "",
-  "main": "listen.js",
+  "main": "index.js",
   "scripts": {
     "test": "jest",
-    "seed": "node ./db/seeds/runseed.js",
-    "start": "node listen.js",
-    "seed-prod": "NODE_ENV=production npm run seed"
+    "seed": "node ./db/seeds/runseed.js"
+
+
   },
   "keywords": [],
   "author": "",

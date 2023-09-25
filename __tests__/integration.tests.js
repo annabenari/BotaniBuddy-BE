@@ -190,7 +190,86 @@ describe("GET /api/users/:user_id/plants to return owned plants", () => {
         expect(response.body.msg).toBe("Not Found");
       });
   });
-});
+
+})
+
+describe("GET /api/users/:user_id/plants/:plant_id to return specific user's plant", () => {
+  test("Status 200: responds with full description of plant", () => {
+    const Users = mongoose.model("users", usersSchema);
+    
+    return Users.findOne({username: "jane_smith"})
+      .then((result) => {
+        return request(app)
+          .get(`/api/users/${result.id}/plants/${result.plants[0]}`)
+          .expect(200)
+          .then((response) => {
+            expect(response.body.myPlant).toHaveProperty('commonName')
+            expect(response.body.myPlant).toHaveProperty('description')
+            expect(response.body.myPlant).toHaveProperty('indoor')
+            expect(response.body.myPlant).toHaveProperty('wateringPeriod')
+            expect(response.body.myPlant).toHaveProperty('poisonousToHumans')
+            expect(response.body.myPlant).toHaveProperty('poisonousToPets')
+          })
+      })
+  })
+
+  test('Status 404: responds with error when plant_id doesnt exist', () => {
+    const Users = mongoose.model("users", usersSchema);
+    const madeUpId = new mongoose.Types.ObjectId("619d5ee25e7410e6270ce598")
+    return Users.findOne({username: "jane_smith"})
+      .then((result) => {
+        return request(app)
+          .get(`/api/users/${result.id}/plants/${madeUpId}`)
+          .expect(404)
+          .then((response) => {
+            expect(response.body.msg).toBe('Plant not found')
+          })
+      })
+  });
+
+  test('Status 400: responds with error when given invalid plant_id type', () => {
+    const Users = mongoose.model("users", usersSchema);
+    return Users.findOne({username: "jane_smith"})
+      .then((result) => {
+        return request(app)
+          .get(`/api/users/${result.id}/plants/nonesense`)
+          .expect(400)
+          .then((response) => {
+            expect(response.body.msg).toBe('Invalid ID type')
+          })
+      })
+  });
+
+  test("Status 404: responds with an error when accessing a user that does not exist", () => {
+    const Users = mongoose.model("users", usersSchema);
+    const madeUpId = new mongoose.Types.ObjectId("619d5ee25e7410e6270ce598")
+    
+    return Users.findOne({username: "jane_smith"})
+      .then((result) => {
+        return request(app)
+          .get(`/api/users/${madeUpId}/plants/${result.plants[0]}`)
+          .expect(404)
+          .then((response) => {
+            expect(response.body.msg).toBe('User not found')
+          })
+      })
+  })
+
+  test("Status 400: responds with an error when invalid type is given for user_id", () => {
+    const Users = mongoose.model("users", usersSchema);
+    
+    return Users.findOne({username: "jane_smith"})
+      .then((result) => {
+        return request(app)
+          .get(`/api/users/nonsense/plants/${result.plants[0]}`)
+          .expect(400)
+          .then((response) => {
+            expect(response.body.msg).toBe('Invalid ID type')
+          })
+      })
+  })
+})
+
 describe("POST /api/users/:user_id/add_by_search allows a user to add a plant they have searched for", () => {
   test("Status 201: creates a new plant in user's plants for a plant that already exists in PlantInfos", () => {
     const Users = mongoose.model("users", usersSchema);
