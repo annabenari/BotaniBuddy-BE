@@ -458,3 +458,29 @@ describe("POST /api/users/:user_id/identify_plants_image finds the name of a pla
     });
   });
 });
+
+describe.only("GET users/user_id/tasks", () => {
+  test("Gets all the tasks for one user", () => {
+    const Users = mongoose.model("users", usersSchema);
+    return Users.find({}, null, { limit: 1 }).then(([user]) => {
+      return request(app)
+        .get(`/api/users/${user._id}/tasks`)
+        .expect(200)
+        .then(({ body }) => {
+          const { tasks } = body;
+          for (let i = 0; i < tasks.length; i++) {
+            const task = tasks[i];
+            expect(task).toHaveProperty("plantName");
+            expect(task).toHaveProperty("plantID");
+            expect(task).toHaveProperty("task");
+          }
+          expect(Array.isArray(tasks)).toBe(true);
+        });
+    });
+  });
+});
+
+// {tasks: [
+//   task1: {plantName, plantId, Task},
+//   task2: {plantName, plantId, Task},
+//   ]}
