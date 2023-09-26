@@ -148,7 +148,9 @@ exports.returnIdentifiedImage = async (buffer, user_id) => {
     formData = new FormData();
     console.log(formData, "formData")
     formData.append("images", toSend);
+    console.log("after append")
   } catch (error) {
+    console.log("in error")
     console.log(error)
     return Promise.reject({
       status: 400,
