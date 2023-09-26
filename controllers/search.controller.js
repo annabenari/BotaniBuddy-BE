@@ -30,8 +30,5 @@ exports.postIdentificationRequest = (request, response, next) => {
     .then(({ score, plantName }) => {
       response.status(201).send({ score, plantName });
     })
-    .catch((err) =>{
-      console.log(err)
-      next(err)
-    });
+    .catch(next);
 };

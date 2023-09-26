@@ -140,18 +140,11 @@ exports.returnIdentifiedImage = async (buffer, user_id) => {
   }
   let formData;
   try {
-    console.log(buffer)
     const arrayBuffer = new Uint8Array(buffer).buffer;
-    console.log(arrayBuffer, "arrayBuffer")
     const toSend = new Blob([arrayBuffer]);
-    console.log(toSend, "toSend")
     formData = new FormData();
-    console.log(formData, "formData")
     formData.append("images", toSend);
-    console.log("after append")
   } catch (error) {
-    console.log("in error")
-    console.log(error)
     return Promise.reject({
       status: 400,
       msg: "Bad request",
@@ -169,10 +162,8 @@ exports.returnIdentifiedImage = async (buffer, user_id) => {
       }
     )
     .then(({ data: { results } }) => {
-      console.log(results)
       const score = results[0].score;
       const plantName = results[0].species.scientificNameWithoutAuthor;
-      console.log("before return")
       return { score, plantName };
     });
 };

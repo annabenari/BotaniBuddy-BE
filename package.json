@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "seed": "node ./db/seeds/runseed.js",
-    "start": "node --trace-warnings listen.js"
+    "start": "node listen.js"
   },
   "keywords": [],
   "author": "",

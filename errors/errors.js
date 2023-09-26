@@ -21,10 +21,10 @@ exports.axiosErrors = (error, request, response, next) => {
       response.status(400).send({
         msg: "Plant species outside of free range of Perenual",
       });
-    } else if (error.data.message === "Species not found") {
+    } else if (error.response.data.message === "Species not found") {
       response.status(404).send({
-        msg: "Not Fond",
-        detail: error.data.message,
+        msg: "Not found",
+        detail: error.response.data.message,
       });
     }
   } else {
@@ -33,7 +33,6 @@ exports.axiosErrors = (error, request, response, next) => {
 };
 
 exports.customErrors = (error, request, response, next) => {
-  console.log(error);
   if (!error.details) {
     error.details = "";
   }
