@@ -169,8 +169,10 @@ exports.returnIdentifiedImage = async (buffer, user_id) => {
       }
     )
     .then(({ data: { results } }) => {
+      console.log(results)
       const score = results[0].score;
       const plantName = results[0].species.scientificNameWithoutAuthor;
+      console.log("before return")
       return { score, plantName };
     });
 };
