@@ -7,18 +7,25 @@ Tech stack:  MongoDB, Express, Node.JS, Axios
 
 # Endpoints: 
 POST /api/login
+
 POST /api/register
-POST /api/users/user_id/plants/addBySearch
-POST /api/users/user_id/plants/addByImage 
+
+POST /api/users/user_id/add_by_search
+
+POST /api/users/user_id/identify_plants_image 
+
 GET /api/users/user_id/plants  
+
 GET /api/users/user_id/plants/plant_id
+
 GET /api/users/user_id/tasks
-PATCH /api/users/user_id/tasks/task_id
+
+PATCH /api/users/user_id/tasks/plant_id
 
 
 # Third-party API's:
 - PlantNet  - providing image identification of plants
-- Perunial  - providing plant information, note limitations with free-plan allowing only species 1 - 3000. 
+- Perenual  - providing plant information, note limitations with free-plan allowing only species 1 - 3000. 
 
 # Dependancies
 * axios@1.5.0
