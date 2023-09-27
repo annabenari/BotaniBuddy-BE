@@ -1,14 +1,14 @@
-const {patchTask}= require('../models/updateTasks.model')
+const { patchTasks } = require("../models/updateTasks.model");
 
 exports.updateTasks = (request, response, next) => {
+    
+    const {user_id, plant_id} = request.params
+    console.log(user_id, plant_id);
 
-    const {plant_id} = request.body
-    console.log(plant_id, "in controller")
-
-    patchTask(user_id, plant_id)
-    .then((response) => {
-        console.log(response, "in controller")
-        response.status(200).send({nextWaterDate: response})
+    patchTasks(user_id, plant_id)
+    .then((nextWaterDate) => {
+        console.log(nextWaterDate, "in controller")
+        response.status(200).send({nextWaterDate})
     })
     .catch(next)
 }

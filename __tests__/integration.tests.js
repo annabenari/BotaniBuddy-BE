@@ -470,12 +470,11 @@ describe.only('PATCH - updates date plant needs to be watered when user clicks t
     .then((user) =>{
   
       const userPlants = user.plants[0]
+      console.log(userPlants);
 
         return request(app)
-        .patch("/api/users/:user_id/tasks/:plant_id")
-        .send({ 
-          "plant_id" : userPlants,
-        })
+        .patch(`/api/users/${user._id}/tasks/${userPlants}`)
+        .send({})
         .expect(200)
         .then(({body}) => {
           console.log(body, "in tests, line 476")
