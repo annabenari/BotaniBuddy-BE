@@ -456,5 +456,68 @@ describe("POST /api/users/:user_id/identify_plants_image finds the name of a pla
           expect(detail).toBe("Species not found");
         });
     });
+  }, 10000);
+});
+
+describe("GET users/user_id/tasks", () => {
+  test("Gets all the tasks for one user", () => {
+    const Users = mongoose.model("users", usersSchema);
+    return Users.find({}, null, { limit: 1 }).then(([user]) => {
+      return request(app)
+        .get(`/api/users/${user._id}/tasks`)
+        .expect(200)
+        .then(({ body }) => {
+          const { tasks } = body;
+          for (let i = 0; i < tasks.length; i++) {
+            const task = tasks[i];
+            expect(task).toHaveProperty("plantName");
+            expect(task).toHaveProperty("plantID");
+            expect(task).toHaveProperty("task");
+          }
+          expect(Array.isArray(tasks)).toBe(true);
+        });
+    });
   });
+  test("Gets an empty array if passed a user with no tasks to do", () => {
+    const Users = mongoose.model("users", usersSchema);
+    return Users.find({}, null, { limit: 3 }).then((users) => {
+      return request(app)
+        .get(`/api/users/${users[2]._id}/tasks`)
+        .expect(200)
+        .then(({ body }) => {
+          const { tasks } = body;
+          expect(tasks).toEqual([]);
+        });
+    });
+  })
+  test("Gets an empty array if passed a user with no plants", () => {
+    const Users = mongoose.model("users", usersSchema);
+    return Users.find().then((users) => {
+      return request(app)
+        .get(`/api/users/${users[4]._id}/tasks`)
+        .expect(200)
+        .then(({ body }) => {
+          const { tasks } = body;
+          expect(tasks).toEqual([]);
+        })
+    })
+  })
+  test("Status 400: should return invalid user id when given an invalid id", () => {
+    return request(app)
+      .get(`/api/users/1/tasks`)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+        expect(body.detail).toBe("Invalid user id");
+      });
+  })
+  test("Status 404: should return user not found when given a user that doesn't exist", () => {
+    return request(app)
+      .get(`/api/users/619d5ee25e7410e6270ce598/tasks`)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Not found");
+        expect(body.detail).toBe("User does not exist");
+      });
+  })
 });
