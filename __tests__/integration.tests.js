@@ -456,7 +456,7 @@ describe("POST /api/users/:user_id/identify_plants_image finds the name of a pla
           expect(detail).toBe("Species not found");
         });
     });
-  });
+  }, 10000);
 });
 
 describe.only("GET users/user_id/tasks", () => {
@@ -478,9 +478,14 @@ describe.only("GET users/user_id/tasks", () => {
         });
     });
   });
+  test("Gets an empty array if passed a user with no tasks to do", () => {
+    
+  })
 });
 
-// {tasks: [
-//   task1: {plantName, plantId, Task},
-//   task2: {plantName, plantId, Task},
-//   ]}
+/*
+no tasks returned should be empty array 200
+errors:
+user invalid 400
+no user exists 404
+*/
