@@ -10,7 +10,7 @@ exports.patchTasks = (plant_id) => {
   return (
     Plants.findById(plant_id)
       .then((currentPlant) => {
-        if(currentPlant === null){
+        if (currentPlant === null) {
           return Promise.reject({
             status: 400,
             msg: "Bad Request",
@@ -31,21 +31,27 @@ exports.patchTasks = (plant_id) => {
         return { valueUntilWatering, unitUntilWatering };
       })
       .then(({ valueUntilWatering, unitUntilWatering }) => {
-
         return Plants.findById(plant_id)
+        .then((plantNewDate) => {
+          plantNewDate.tasks.toBeWateredAgain = dayjs()
+            .add(valueUntilWatering, unitUntilWatering)
+            .format("DD-MM-YYYY");
 
-        .then((plantNewDate)=> {
+          const update = {
+            tasks: { toBeWateredAgain: plantNewDate.tasks.toBeWateredAgain },
+          };
 
-            //define new water date (today + 7)
-           plantNewDate.tasks.toBeWateredAgain = dayjs().add(valueUntilWatering, unitUntilWatering).format("DD-MM-YYYY")
-           
-            return plantNewDate
-        })
+          const filter = { _id: plant_id };
 
-      }) .catch((err)=> {
-        return Promise.reject(err)
+          return Plants.findOneAndUpdate(filter, update, {
+            new: true,
+          }).then((updatedPlant) => {
+            return updatedPlant;
+          });
+        });
       })
-
+      .catch((err) => {
+        return Promise.reject(err);
+      })
   );
-
 };
