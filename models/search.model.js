@@ -6,6 +6,7 @@ const {
   usersSchema,
 } = require("../db/seeds/models");
 const dayjs = require("dayjs");
+const {PERENUAL_KEY, PLANTNET_KEY} = require("../db/keys");
 
 exports.createPlantBySearch = async (name, user_id) => {
   //Connect to tables
@@ -23,7 +24,7 @@ exports.createPlantBySearch = async (name, user_id) => {
   //Make get request for base data
   return axios
     .get(
-      `https://perenual.com/api/species-list?key=sk-Zzn7650c218d729af2240&q=${name}`
+      `https://perenual.com/api/species-list?key=${PERENUAL_KEY}&q=${name}`
     )
     .then(async ({ data }) => {
       if (data.data.length === 0) {
@@ -48,7 +49,7 @@ exports.createPlantBySearch = async (name, user_id) => {
       } else {
         return axios
           .get(
-            `https://perenual.com/api/species/details/${data.data[0].id}?key=sk-Zzn7650c218d729af2240`
+            `https://perenual.com/api/species/details/${data.data[0].id}?key=${PERENUAL_KEY}`
           )
           .then(async ({ data }) => {
             // add to PlantInfos
@@ -153,7 +154,7 @@ exports.returnIdentifiedImage = async (buffer, user_id) => {
   }
   return axios
     .post(
-      "https://my-api.plantnet.org/v2/identify/all?api-key=2b10GLsEqAO1ADYfA8O1lgyO",
+      `https://my-api.plantnet.org/v2/identify/all?api-key=${PLANTNET_KEY}`,
       formData,
       {
         headers: {
