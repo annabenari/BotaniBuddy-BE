@@ -7,6 +7,10 @@ const testData = require("../db/data/test-data/index");
 const { usersSchema } = require("../db/seeds/models");
 const formData = require("./assets/formData");
 const formDataInvalidImage = require("./assets/formDataInvalidImage");
+const { updateTasks } = require("../controllers/updateTasks.controller");
+const Plants = require("../db/data/test-data/Plants");
+
+
 
 beforeEach(async () => {
   await seed(testData);
@@ -521,3 +525,29 @@ describe("GET users/user_id/tasks", () => {
       });
   })
 });
+describe('PATCH - updates date plant needs to be watered when user clicks to confirm they have watered', ()=> {
+  test('Status 200: returns new water date', ()=> {
+
+    const Users = mongoose.model("users", usersSchema);
+    return Users.findOne({username: "jane_smith"})
+    .then((user) =>{
+  
+      const userPlants = user.plants[0]
+
+        return request(app)
+        .patch(`/api/users/${user._id}/tasks/${userPlants}`)
+        .send({})
+        .expect(200)
+        .then(({body: {nextWaterDate}}) => {
+  
+          expect(nextWaterDate.tasks).toHaveProperty("toBeWateredAgain", expect.any(String))
+          expect(nextWaterDate).toHaveProperty("_id", expect.any(String))
+          expect(nextWaterDate).toHaveProperty("plantType", expect.any(Number))
+        })
+
+      })
+     
+    })
+
+  })
+

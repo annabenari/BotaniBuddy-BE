@@ -15,6 +15,7 @@ const {
   postPlantBySearch,
   postIdentificationRequest,
 } = require("./controllers/search.controller");
+const { updateTasks } = require("./controllers/updateTasks.controller");
 
 const { getTasks } = require("./controllers/tasks.controller");
 
@@ -37,6 +38,8 @@ app.post(
   postIdentificationRequest
 );
 app.get(`/api/users/:user_id/tasks`, getTasks);
+
+app.patch("/api/users/:user_id/tasks/:plant_id", updateTasks)
 
 app.use((request, response) => {
   response.status(404).send({ msg: "Not found" });
