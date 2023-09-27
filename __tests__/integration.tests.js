@@ -544,10 +544,22 @@ describe('PATCH - updates date plant needs to be watered when user clicks to con
           expect(nextWaterDate).toHaveProperty("_id", expect.any(String))
           expect(nextWaterDate).toHaveProperty("plantType", expect.any(Number))
         })
-
       })
-     
     })
+    test("Status 400: invalid plant_id", ()=>{
+    const Users = mongoose.model("users", usersSchema);
+    return Users.findOne({username: "jane_smith"})
+    .then((user)=>{
+      return request(app)
+        .patch(`/api/users/${user._id}/tasks/WRONGPLANTID`)
+        .send({})
+        .expect(400)
+        .then(({body})=>{
+          expect(body.msg).toBe("Bad Request")
+          expect(body.detail).toBe("Invalid Plant ID")
+        })
 
+    })
+    })
   })
 

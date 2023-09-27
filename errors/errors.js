@@ -33,6 +33,7 @@ exports.axiosErrors = (error, request, response, next) => {
 };
 
 exports.customErrors = (error, request, response, next) => {
+  
   if (!error.details) {
     error.details = "";
   }
