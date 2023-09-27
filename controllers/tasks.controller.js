@@ -6,5 +6,7 @@ exports.getTasks = (request, response, next) => {
     .then((tasks) => {
       response.status(200).send({ tasks });
     })
-    .catch(next);
+    .catch((error) => {
+      next(error);
+    });
 };
