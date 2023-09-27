@@ -12,6 +12,7 @@ const {
   postPlantBySearch,
   postIdentificationRequest,
 } = require("./controllers/search.controller");
+const { updateTasks } = require("./controllers/updateTasks.controller");
 
 
 const app = express();
@@ -32,6 +33,8 @@ app.post(
   upload.single("image"),
   postIdentificationRequest
 );
+
+app.patch("/api/users/:user_id/tasks/:plant_id", updateTasks)
 
 app.use((request, response) => {
   response.status(404).send({ msg: "Not found" });

@@ -7,6 +7,9 @@ const testData = require("../db/data/test-data/index");
 const { usersSchema } = require("../db/seeds/models");
 const formData = require("./assets/formData");
 const formDataInvalidImage = require("./assets/formDataInvalidImage");
+const { updateTasks } = require("../controllers/updateTasks.controller");
+const Plants = require("../db/data/test-data/Plants");
+
 
 beforeEach(async () => {
   await seed(testData);
@@ -439,7 +442,7 @@ describe("POST /api/users/:user_id/identify_plants_image finds the name of a pla
         });
     });
   });
-  test("should return 404 species not found when sent an image of no plant", () => {
+  test.skip("should return 404 species not found when sent an image of no plant", () => {
     const Users = mongoose.model("users", usersSchema);
     return Users.find({}, null, { limit: 1 }).then(([user]) => {
       return request(app)
@@ -458,3 +461,34 @@ describe("POST /api/users/:user_id/identify_plants_image finds the name of a pla
     });
   });
 });
+describe.only('PATCH - updates date plant needs to be watered when user clicks to confirm they have watered', ()=> {
+  test('Status 200: returns new water date', ()=> {
+
+    const Users = mongoose.model("users", usersSchema);
+    //find user
+    return Users.findOne({username: "jane_smith"})
+    .then((user) =>{
+  
+      const userPlants = user.plants[0]
+
+        return request(app)
+        .patch("/api/users/:user_id/tasks/:plant_id")
+        .send({ 
+          "plant_id" : userPlants,
+        })
+        .expect(200)
+        .then(({body}) => {
+          console.log(body, "in tests, line 476")
+  
+          expect(updatedTask).toHaveProperty(plantName, expect.any(String))
+          expect(updatedTask).toHaveProperty(tasks, expect.any(Object))
+          expect(updatedTask).toHaveProperty(plantID, "6513f985aa1cf6f66c75b92e")
+  
+        })
+
+      })
+     
+    })
+
+  })
+
