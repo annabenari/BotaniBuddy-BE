@@ -27,7 +27,7 @@ PATCH /api/users/user_id/tasks/plant_id
 - PlantNet  - providing image identification of plants
 - Perenual  - providing plant information, note limitations with free-plan allowing only species 1 - 3000. 
 
-# Dependancies
+# Dependencies
 * axios@1.5.0
 * bcrypt@5.1.1
 * cors@2.8.5
