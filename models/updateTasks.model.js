@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { plantsSchema, plantInfoSchema } = require("../db/seeds/models");
 const dayjs = require("dayjs");
 
-exports.patchTasks = (user_id, plant_id) => {
+exports.patchTasks = (plant_id) => {
   const Plants = mongoose.model("plants", plantsSchema);
   const PlantsInfo = mongoose.model("PlantInfo", plantInfoSchema);
 
@@ -10,7 +10,15 @@ exports.patchTasks = (user_id, plant_id) => {
   return (
     Plants.findById(plant_id)
       .then((currentPlant) => {
-        return currentPlant.plantType;
+        if(currentPlant === null){
+          return Promise.reject({
+            status: 400,
+            msg: "Bad Request",
+            details: "Invalid Plant ID",
+          });
+        } else {
+          return currentPlant.plantType;
+        }
       })
       // get watering frequency from plant info using perunal ID
       .then((perenualIdValue) => {
@@ -34,7 +42,10 @@ exports.patchTasks = (user_id, plant_id) => {
             return plantNewDate
         })
 
+      }) .catch((err)=> {
+        return Promise.reject(err)
       })
+
   );
 
 };
