@@ -7,7 +7,6 @@ exports.updateTasks = (request, response, next) => {
 
     patchTasks(user_id, plant_id)
     .then((nextWaterDate) => {
-        console.log(nextWaterDate, "in controller")
         response.status(200).send({nextWaterDate})
     })
     .catch(next)
