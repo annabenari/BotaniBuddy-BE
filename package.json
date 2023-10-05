@@ -4,9 +4,15 @@
   "description": "",
   "main": "listen.js",
   "scripts": {
+
     "test": "jest",
     "seed": "node ./db/seeds/runseed.js",
     "start": "node listen.js"
+
+    "start": "node listen.js",
+    "test": "jest",
+    "seed": "node ./db/seeds/runseed.js"
+
   },
   "keywords": [],
   "author": "",
