@@ -4,7 +4,6 @@ const plantInfoSchema = new mongoose.Schema({
   perenualId: Number,
 
   commonName: String,
-
   scientificName: String,
 
   maxHeight: String,
@@ -12,8 +11,8 @@ const plantInfoSchema = new mongoose.Schema({
   wateringFrequency: String,
 
   wateringPeriod: {
-    value: String,
-    unit: String,
+    value: {type: String, default: "7"},
+    unit: {type: String, default: "days"},
   },
 
   sunlight: Array,

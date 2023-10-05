@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
+
+
+const ENV = process.env.NODE_ENV || "development";
+
 const listen = require("../listen");
 
 const ENV = process.env.URL || "development";
+
 
 require("dotenv").config({ path: `${__dirname}/../.env.${ENV}` });
 
@@ -12,7 +17,10 @@ if (!URL) {
 }
 
 async function connection() {
+
+
   console.log("before connection");
+
   await mongoose.connect(URL);
   console.log("after connection");
 }
